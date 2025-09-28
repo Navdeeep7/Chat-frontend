@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
-import { Send, Reply, X, Users, Wifi, WifiOff, MessageCircle } from "lucide-react";
+import { Send, Reply, X, Users, Wifi, WifiOff } from "lucide-react";
 
 interface Message {
   id: string;
@@ -189,107 +189,84 @@ export default function WhatsAppChat() {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
-      {/* Background pattern */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-purple-600/20"></div>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(120,119,198,0.1),rgba(255,255,255,0))]"></div>
-      </div>
-      
-      <div className="relative flex-1 flex items-center justify-center p-4">
-        <div className="w-full max-w-md backdrop-blur-xl bg-slate-800/70 shadow-2xl rounded-3xl flex flex-col overflow-hidden border border-slate-700/50 ring-1 ring-white/10">
+    <div className="flex flex-col h-screen bg-neutral-950">
+      <div className="flex-1 flex items-center justify-center p-6">
+        <div className="w-full max-w-md bg-neutral-900 shadow-xl rounded-2xl flex flex-col overflow-hidden border border-neutral-800">
           {/* Header */}
-          <div className="bg-gradient-to-r from-slate-800 to-slate-700 px-6 py-4 text-white border-b border-slate-600/50">
+          <div className="px-5 py-4 bg-neutral-900 border-b border-neutral-800">
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="font-bold text-lg bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                <h1 className="font-medium text-lg text-white">
                   {isConnected ? "Group Chat" : "Join Chat"}
                 </h1>
-                {isConnected && (
-                  <div className="flex items-center gap-2 text-slate-300 text-sm mt-1">
-                    
-                  
-                  </div>
-                )}
+                
               </div>
               {isConnected && (
-                <div className="flex items-center gap-2 bg-gradient-to-r from-blue-600/20 to-purple-600/20 backdrop-blur-sm px-3 py-1.5 rounded-full border border-slate-600/50">
-                  <div className="w-2 h-2 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full"></div>
-                  <span className="text-sm font-medium text-slate-200">{name}</span>
+                <div className="flex items-center gap-2 bg-neutral-800 px-3 py-1 rounded-full">
+                  <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
+                  <span className="text-sm text-neutral-300">{name}</span>
                 </div>
               )}
             </div>
           </div>
 
           {/* Chat messages */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gradient-to-b from-slate-900/50 to-slate-800/50 max-h-[500px] min-h-[400px] backdrop-blur-sm">
+          <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-neutral-950 max-h-[500px] min-h-[400px]">
             {messages.length === 0 && (
-              <div className="flex flex-col items-center justify-center h-full text-slate-400">
-                <div className="relative mb-6">
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full blur-xl opacity-30"></div>
-                  <MessageCircle size={64} className="relative text-slate-500" />
-                </div>
-                <p className="text-center font-medium text-slate-300">No messages yet…</p>
-                <p className="text-xs text-center mt-2 text-slate-500">Start the conversation and connect with others!</p>
+              <div className="flex flex-col items-center justify-center h-full">
+                <Users size={32} className="text-neutral-600 mb-3" />
+                <p className="text-neutral-500 text-sm">No messages yet</p>
               </div>
             )}
             {messages.map((msg) => {
               if (msg.type === 'system') {
                 return (
                   <div key={msg.id} className="flex justify-center">
-                    <div className="bg-gradient-to-r from-slate-700/50 to-slate-600/50 backdrop-blur-sm text-slate-300 px-4 py-2 rounded-full text-xs border border-slate-600/30 shadow-lg">
-                      <span className="flex items-center gap-2">
-                        <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></div>
-                        {msg.text.toLowerCase()}
-                      </span>
+                    <div className="bg-neutral-800 text-neutral-400 px-3 py-1 rounded-full text-xs">
+                      {msg.text.toLowerCase()}
                     </div>
                   </div>
                 );
               }
 
               const isOwn = msg.sender === name;
-              const showSender = !isOwn && msg.sender !== "system";
 
               return (
                 <div
                   key={msg.id}
                   className={`flex ${isOwn ? "justify-end" : "justify-start"} group`}
                 >
-                  <div className={`max-w-[85%] ${isOwn ? "items-end" : "items-start"} flex flex-col`}>
-                    {showSender && (
-                      <div className="text-xs text-slate-400 mb-1 px-2 font-medium">
+                  <div className={`max-w-[80%] flex flex-col ${isOwn ? "items-end" : "items-start"}`}>
+                    {!isOwn && (
+                      <div className="text-xs text-neutral-500 mb-1 px-1">
                         {msg.sender}
                       </div>
                     )}
                     <div className="relative">
                       <div
-                        className={`px-4 py-3 rounded-2xl break-words shadow-lg backdrop-blur-sm relative group-hover:shadow-xl group-hover:scale-[1.02] transition-all duration-300 border ${
+                        className={`px-3 py-2 rounded-2xl ${
                           isOwn
-                            ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-br-md border-blue-500/20 shadow-blue-500/25"
-                            : "bg-slate-700/70 text-slate-100 rounded-bl-md border-slate-600/50 shadow-slate-900/50"
+                            ? "bg-blue-600 text-white rounded-br-md"
+                            : "bg-neutral-800 text-neutral-100 rounded-bl-md"
                         }`}
                       >
                         {/* Reply preview */}
                         {msg.replyTo && (
-                          <div className={`mb-3 pb-2 border-l-4 pl-3 rounded-r ${
-                            isOwn 
-                              ? "border-blue-300 bg-white/10 backdrop-blur-sm" 
-                              : "border-purple-400 bg-slate-600/50 backdrop-blur-sm"
+                          <div className={`mb-2 pb-2 border-l-2 pl-2 ${
+                            isOwn ? "border-blue-300" : "border-neutral-600"
                           }`}>
-                            <div className="text-xs opacity-90 font-semibold mb-1">
+                            <div className="text-xs opacity-80 font-medium">
                               {msg.replyTo.sender}
                             </div>
-                            <div className="text-xs opacity-70 truncate">
+                            <div className="text-xs opacity-60 truncate">
                               {msg.replyTo.text}
                             </div>
                           </div>
                         )}
                         
-                        <div className="flex items-end gap-3">
-                          <span className="flex-1 leading-relaxed">{msg.text}</span>
-                          <span className={`text-xs opacity-70 flex-shrink-0 font-mono ${
-                            isOwn ? "text-blue-100" : "text-slate-400"
-                          }`}>
+                        <div className="flex items-end gap-2">
+                          <span className="flex-1 text-sm">{msg.text}</span>
+                          <span className="text-xs opacity-60 flex-shrink-0">
                             {formatTime(msg.timestamp)}
                           </span>
                         </div>
@@ -299,10 +276,10 @@ export default function WhatsAppChat() {
                       {!isOwn && (
                         <button
                           onClick={() => handleReply(msg)}
-                          className="absolute -right-10 top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all duration-200 p-2 hover:bg-slate-600/50 rounded-full backdrop-blur-sm border border-slate-500/30"
+                          className="absolute -right-8 top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-neutral-800 rounded-full"
                           title="Reply"
                         >
-                          <Reply size={14} className="text-slate-300" />
+                          <Reply size={14} className="text-neutral-500" />
                         </button>
                       )}
                     </div>
@@ -315,21 +292,21 @@ export default function WhatsAppChat() {
 
           {/* Reply preview */}
           {replyingTo && (
-            <div className="bg-slate-800/80 backdrop-blur-sm border-t border-slate-600/50 px-4 py-3">
+            <div className="bg-neutral-900 border-t border-neutral-800 px-4 py-3">
               <div className="flex items-start justify-between">
-                <div className="flex-1 border-l-4 border-purple-400 pl-3 bg-slate-700/30 rounded-r p-2">
-                  <div className="text-sm font-semibold text-purple-300 mb-1">
+                <div className="flex-1 border-l-2 border-blue-500 pl-3">
+                  <div className="text-sm text-blue-400">
                     Replying to {replyingTo.sender}
                   </div>
-                  <div className="text-sm text-slate-300 truncate">
+                  <div className="text-sm text-neutral-400 truncate">
                     {replyingTo.text}
                   </div>
                 </div>
                 <button
                   onClick={cancelReply}
-                  className="ml-3 p-1.5 hover:bg-slate-600/50 rounded-full transition-colors backdrop-blur-sm border border-slate-500/30"
+                  className="ml-2 p-1 hover:bg-neutral-800 rounded-full transition-colors"
                 >
-                  <X size={16} className="text-slate-400" />
+                  <X size={14} className="text-neutral-500" />
                 </button>
               </div>
             </div>
@@ -337,61 +314,52 @@ export default function WhatsAppChat() {
 
           {/* Input area */}
           {!isConnected ? (
-            <div className="p-4 bg-slate-800/80 backdrop-blur-sm border-t border-slate-600/50">
+            <div className="p-4 bg-neutral-900 border-t border-neutral-800">
               <div className="flex gap-3">
                 <input
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Enter your name"
-                  className="flex-1 px-4 py-3 bg-slate-700/50 backdrop-blur-sm text-slate-100 placeholder-slate-400 border border-slate-600/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all"
+                  className="flex-1 px-3 py-2 bg-neutral-800 text-white border border-neutral-700 rounded-lg focus:outline-none focus:border-blue-500 transition-colors placeholder-neutral-500"
                   disabled={isJoining}
                   onKeyPress={(e) => e.key === 'Enter' && joinChat()}
                 />
                 <button
                   onClick={joinChat}
                   disabled={isJoining || !name.trim()}
-                  className={`px-6 py-3 rounded-xl font-semibold transition-all transform backdrop-blur-sm border ${
+                  className={`px-4 py-2 rounded-lg transition-colors ${
                     isJoining || !name.trim()
-                      ? "bg-slate-600/50 text-slate-400 cursor-not-allowed border-slate-500/30"
-                      : "bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white hover:scale-105 shadow-lg hover:shadow-purple-500/25 border-blue-500/20"
+                      ? "bg-neutral-700 text-neutral-500 cursor-not-allowed"
+                      : "bg-blue-600 text-white hover:bg-blue-700"
                   }`}
                 >
-                  {isJoining ? (
-                    <div className="flex items-center gap-2">
-                      <div className="w-4 h-4 border-2 border-slate-300 border-t-transparent rounded-full animate-spin"></div>
-                      Joining...
-                    </div>
-                  ) : (
-                    "Join Chat"
-                  )}
+                  {isJoining ? "Joining..." : "Join"}
                 </button>
               </div>
             </div>
           ) : (
-            <div className="p-4 bg-slate-800/80 backdrop-blur-sm border-t border-slate-600/50">
+            <div className="p-4 bg-neutral-900 border-t border-neutral-800">
               <div className="flex items-end gap-3">
-                <div className="flex-1">
-                  <input
-                    ref={inputRef}
-                    type="text"
-                    value={inputValue}
-                    onChange={(e) => setInputValue(e.target.value)}
-                    placeholder="Type a message…"
-                    className="w-full px-4 py-3 bg-slate-700/50 backdrop-blur-sm text-slate-100 placeholder-slate-400 border border-slate-600/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all resize-none"
-                    onKeyPress={handleKeyPress}
-                  />
-                </div>
+                <input
+                  ref={inputRef}
+                  type="text"
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
+                  placeholder="Type a message…"
+                  className="flex-1 px-3 py-2 bg-neutral-800 text-white border border-neutral-700 rounded-lg focus:outline-none focus:border-blue-500 transition-colors placeholder-neutral-500"
+                  onKeyPress={handleKeyPress}
+                />
                 <button
                   onClick={sendMessage}
                   disabled={!inputValue.trim()}
-                  className={`p-3 rounded-xl transition-all transform backdrop-blur-sm border ${
+                  className={`p-2 rounded-lg transition-colors ${
                     inputValue.trim()
-                      ? "bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white hover:scale-110 shadow-lg hover:shadow-purple-500/25 border-blue-500/20"
-                      : "bg-slate-600/50 text-slate-400 cursor-not-allowed border-slate-500/30"
+                      ? "bg-blue-600 text-white hover:bg-blue-700"
+                      : "bg-neutral-700 text-neutral-500 cursor-not-allowed"
                   }`}
                 >
-                  <Send size={20} />
+                  <Send size={18} />
                 </button>
               </div>
             </div>
