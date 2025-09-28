@@ -199,12 +199,7 @@ export default function WhatsAppChat() {
                 <h1 className="font-medium text-lg text-white">
                   {isConnected ? "Group Chat" : "Join Chat"}
                 </h1>
-                {isConnected && (
-                  <div className="flex items-center gap-2 text-neutral-400 text-sm mt-0.5">
-                    {isConnected ? <Wifi size={12} /> : <WifiOff size={12} />}
-                    <span>{onlineUsers} online</span>
-                  </div>
-                )}
+                
               </div>
               {isConnected && (
                 <div className="flex items-center gap-2 bg-neutral-800 px-3 py-1 rounded-full">
