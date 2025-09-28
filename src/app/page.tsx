@@ -199,7 +199,12 @@ export default function WhatsAppChat() {
                 <h1 className="font-medium text-lg text-white">
                   {isConnected ? "Group Chat" : "Join Chat"}
                 </h1>
-                
+                {isConnected && (
+                  <div className="flex items-center gap-2 text-neutral-400 text-sm mt-0.5">
+                    {isConnected ? <Wifi size={12} /> : <WifiOff size={12} />}
+                    <span>{onlineUsers} online</span>
+                  </div>
+                )}
               </div>
               {isConnected && (
                 <div className="flex items-center gap-2 bg-neutral-800 px-3 py-1 rounded-full">
@@ -276,10 +281,11 @@ export default function WhatsAppChat() {
                       {!isOwn && (
                         <button
                           onClick={() => handleReply(msg)}
-                          className="absolute -right-8 top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-neutral-800 rounded-full"
+                          className="absolute -right-8 top-1/2 transform -translate-y-1/2 opacity-0 md:group-hover:opacity-100 md:transition-opacity md:p-1 md:hover:bg-neutral-800 rounded-full 
+                                   sm:opacity-100 sm:p-0.5 sm:bg-neutral-800/70 sm:-right-7"
                           title="Reply"
                         >
-                          <Reply size={14} className="text-neutral-500" />
+                          <Reply size={12} className="text-neutral-400 sm:text-neutral-300" />
                         </button>
                       )}
                     </div>
